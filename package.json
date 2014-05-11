@@ -1,0 +1,19 @@
+{
+	"name": "jquery.print-in-page",
+	"title": "jQuery Print In Page",
+	"description": "Print parts (elements) in page without the need for copying or rerendering in iframes or popups.",
+	"author": "Ger Hobbelt",
+	"homepage": "https://github.com/GerHobbelt/jquery.print-in-page/",
+	"version": "0.0.1",
+	"devDependencies": {
+		"grunt": ">=0.4.2",
+		"grunt-cli": ">=0.1.11",
+		"grunt-contrib-jshint": ">=0.4.3",
+		"grunt-contrib-concat": ">=0.3.0",
+		"grunt-contrib-uglify": ">=0.2.0",
+		"grunt-contrib-coffee": ">=0.7.0"
+	},
+	"scripts": {
+		"test": "grunt travis --verbose"
+	}
+}
