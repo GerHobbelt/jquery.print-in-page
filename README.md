@@ -11,9 +11,9 @@ Use Cases / When you want to use this
 
 ### Single Page Applications (read: lots of JavaScript in your page!)
 
-You have a Single Page Application of some complexity and you want to print just part(s) of the DOM without having to go through the effort of setting up a proper clone/copy in an iframe -- a job which can be particularly nasty when your content is largely JavaScript generated, e.g. large data grids, dynamic graphics such as D3-based graphs, etc.. 
+You have a Single Page Application of some complexity and you want to print all or just part(s) of the DOM without having to go through the effort of setting up a proper clone/copy in an iframe -- a job which can be particularly nasty when your content is largely JavaScript generated, e.g. large data grids, dynamic graphics such as D3-based graphs, etc.. 
 
-re it would be so good to have a little tool which would just hide and unhide the irrelevant parts of your current DOM while printing. 
+It would be so good to have a little tool which would just hide and unhide the irrelevant parts of your current DOM while printing. 
 
 Oh, and a Print Preview would be nice!
 
