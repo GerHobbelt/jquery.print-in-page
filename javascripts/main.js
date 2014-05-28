@@ -8,7 +8,7 @@ requirejs.config({
 
 require(["jquery", "assert", "print-in-page"], function ($, assert, pip) {
 	var master_instance = $.fn.print({
-        preview: true   /* bogus */
+        //...
     });
 	console.log(master_instance);
 
@@ -98,7 +98,7 @@ require(["jquery", "assert", "print-in-page"], function ($, assert, pip) {
         zone = zone.join(", ");
         var $el_set = $(zone);
         print_session_instance = $el_set.print({
-            buttonBlahBlah: true        /* bogus */
+            //...
         })
         .on("finishPrintPreview", function (e) {
             console.log("button event: ", e);
