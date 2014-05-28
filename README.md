@@ -40,7 +40,7 @@ and with a preview it goes something like this:
 ```
 var $your_selection = $('.collect-the-DOM-leaves-you-wish-to-print');
 // set up the print environment, but do NOT execute it yet.
-// Also hook into the post-preview to ensure we will ait for
+// Also hook into the post-preview to ensure we will wait for
 // the user to hit 'okay' button after having seen the preview:
 var pip_instance = $your_selection.print()
 .on("finishPrintPreview", function (e) {
@@ -72,7 +72,11 @@ pip_instance.continue();
 
 ### Your browser environment does not allow iframes nor popup windows
 
-In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window). 
+In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).
+
+(Also note that any users who employ ad & popup blockers *very probably* not only nip any popups in the bud but also kill your iframes too, particularly when those blockers have been dialed up to aggressive protection levels. jQuery.print-in-page doesn't mind. In fact, we heartily encourage ad-blocking in your web pages!)
+
+
 
 
 #### The Answer
