@@ -24,7 +24,7 @@ Oh, and a Print Preview would be nice!
 Quite simple: use `jQuery.print-in-page` instead:
 
 
-```
+```javascript
 var $your_selection = $('.collect-the-DOM-leaves-you-wish-to-print');
 // set up the print environment, but do NOT execute it yet.
 var pip_instance = $your_selection.print();
@@ -37,7 +37,7 @@ pip_instance.continue();
 
 and with a preview it goes something like this:
 
-```
+```javascript
 var $your_selection = $('.collect-the-DOM-leaves-you-wish-to-print');
 // set up the print environment, but do NOT execute it yet.
 // Also hook into the post-preview to ensure we will wait for
@@ -100,9 +100,13 @@ And no copying the DOM snapshot or otherwise into iframes or popups, hence less 
 API
 ---
 
-`$.fn.print(options)` -- can be used to set the options shared among all 'print-in-page' instances, i.e. use this if you want to tweak the defaults.
+<dl>
+<dt>`$.fn.print(options)`</dt>
+  <dd>can be used to set the options shared among all 'print-in-page' instances, i.e. use this if you want to tweak the defaults.</dd>
 
-`$els.print(options)` -- initializes a print-in-page instance for the given DOM node collection. Returns a reference to the print-in-page instance, so that you can chain print-in-page methods.
+<dt>`$els.print(options)`</dt>
+  <dd>initializes a print-in-page instance for the given DOM node collection. Returns a reference to the print-in-page instance, so that you can chain print-in-page methods.</dd>
+</dl>
 
 
 
@@ -110,7 +114,7 @@ API
 
 You can override the class names applied by jQuery.print-in-page to accomplish the show/hide of the relevant DOM content. Here's the default set:
 
-```
+```javascript
 {
   printLeafClass:         "pip-print",
   printParentClass:       "pip-print-parent",
@@ -121,7 +125,7 @@ You can override the class names applied by jQuery.print-in-page to accomplish t
 
 which you may override by specifying different class names in the `.print(options)` like this:
 
-```
+```javascript
 // tweak the global instance, which serves as a 
 // defaults container for all .print() sessions
 // yet to come:
@@ -135,7 +139,7 @@ $.fn.print({
 
 or 
 
-```
+```javascript
 // set up a special set of classes for this particular
 // instance:
 var pip = $('table.report').print({
