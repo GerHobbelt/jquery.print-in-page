@@ -53,7 +53,30 @@
 <h4>
 <a name="user-content-the-answer" class="anchor" href="#the-answer"><span class="octicon octicon-link"></span></a>The Answer</h4>
 
-<p>Quite simple: use <code>jQuery.print-in-page</code> instead:</p>
+<p>Quite simple: use <code>jQuery.print-in-page</code> instead. See the usage example further below.</p>
+
+<h3>
+<a name="user-content-your-browser-does-not-allow-iframes-nor-popup-windows" class="anchor" href="#your-browser-does-not-allow-iframes-nor-popup-windows"><span class="octicon octicon-link"></span></a>Your browser does not allow iframes nor popup windows</h3>
+
+<p>In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).</p>
+
+<p>(Also note that any users who employ ad &amp; popup blockers <em>very probably</em> not only nip any popups in the bud but also kill your iframes too, particularly when those blockers have been dialed up to aggressive protection levels. jQuery.print-in-page doesn't mind. In fact, we heartily encourage ad-blocking in your web pages!)</p>
+
+<h4>
+<a name="user-content-the-answer-1" class="anchor" href="#the-answer-1"><span class="octicon octicon-link"></span></a>The Answer</h4>
+
+<p>Again, <code>jQuery.print-in-page</code> at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (<code>window.print()</code>) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. </p>
+
+<p>When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.</p>
+
+<p>Easy as pie.</p>
+
+<p>And no copying the DOM snapshot or otherwise into iframes or popups, hence less memory consumption by the browser too!</p>
+
+<h4>
+<a name="user-content-usage-example" class="anchor" href="#usage-example"><span class="octicon octicon-link"></span></a>Usage Example</h4>
+
+<p>Simply set up a print instance using <code>.print()</code> and then execute the print process by calling its <code>.continue()</code> method once:</p>
 
 <div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">$your_selection</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'.collect-the-DOM-leaves-you-wish-to-print'</span><span class="p">);</span>
 <span class="c1">// set up the print environment, but do NOT execute it yet.</span>
@@ -95,24 +118,6 @@
 <span class="c1">// (the print process will follow automatically):</span>
 <span class="nx">pip_instance</span><span class="p">.</span><span class="k">continue</span><span class="p">();</span>
 </pre></div>
-
-<h3>
-<a name="user-content-your-browser-environment-does-not-allow-iframes-nor-popup-windows" class="anchor" href="#your-browser-environment-does-not-allow-iframes-nor-popup-windows"><span class="octicon octicon-link"></span></a>Your browser does not allow iframes nor popup windows</h3>
-
-<p>In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).</p>
-
-<p>(Also note that any users who employ ad &amp; popup blockers <em>very probably</em> not only nip any popups in the bud but also kill your iframes too, particularly when those blockers have been dialed up to aggressive protection levels. jQuery.print-in-page doesn't mind. In fact, we heartily encourage ad-blocking in your web pages!)</p>
-
-<h4>
-<a name="user-content-the-answer-1" class="anchor" href="#the-answer-1"><span class="octicon octicon-link"></span></a>The Answer</h4>
-
-<p>Again, <code>jQuery.print-in-page</code> at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (<code>window.print()</code>) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. </p>
-
-<p>When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.</p>
-
-<p>Easy as pie.</p>
-
-<p>And no copying the DOM snapshot or otherwise into iframes or popups, hence less memory consumption by the browser too!</p>
 
 <hr><h2>
 <a name="user-content-api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
@@ -201,7 +206,13 @@
     <dd>...</dd>
 
   <dt>donePrinting</dt>
-    <dd>this is the last event you will receive at the end of any and each print/preview session</dd>
+    <dd>
+    <p>This is the last event you will receive at the end of any and each print/preview session.</p>
+
+    <blockquote>
+    Note that the print run is finished once this event has passed. The print session (i.e. the reference which was previously returned by the `.print()` call) will reset itself after this. This means that you may invoke `.continue()` again to rerun the print process.
+    </blockquote>
+    </dd>
 
   <dt>abortPrinting</dt>
     <dd>this event is fired when the <code>.abort()</code> API method has been invoked and the current print/preview process can be aborted.</dd>

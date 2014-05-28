@@ -217,6 +217,17 @@ ol {
 dl dt {
   font-weight: bold;
   margin-top: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
+
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+dl dt code {
+  box-shadow: 0;
+  background-color: #eee;
 }
 
 dl dd {
