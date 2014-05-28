@@ -202,6 +202,55 @@ print-in-page fires these custom events on the **print-in-page instance**:
 
 
 
+#### Notes about event handlers
+
+When you have an event handler which includes some 'asynchronous code', e.g. the need to wait for the user to click a button, then the print/preview process can be halted at the given step until the async code finishes and can invoke the `.continue()` API method.
+
+The second example in the **Use Cases** section above already hints how this is to be done:
+
+- you must notify jQuery.print-in-page that the current event handler wants to wait for an async event to finish by flagging the event to 'stop propagation':
+
+  ```javascript
+pip_instance  
+.on("finishPrintPreview", function (e) {
+    // signal the system that it should NOT automatically 
+    // call .continue() after we are done here:
+    e.stopPropagation();
+});
+  ```
+
+- the complement of this action is the need to manually invoke the `.continue()` method from the async event handler which we wanted to wait for, e.g.
+
+  ```javascript
+$('#preview-okay').click(function (e) {
+  pip_instance.continue();        
+});
+  ```
+
+The gist of this is that:
+
+- every event is implicitly followed by a `.continue()` **unless** the event handler(s) flagged the event via [`event.stopPropagation()`](http://api.jquery.com/event.stoppropagation/)
+
+- every event is implicitly followed by the 'default process' code **unless** the event handler(s) flagged the event via [`event.preventDefault()`](http://api.jquery.com/event.preventdefault/). 
+
+  **Note** that this does not preclude the implicit execution of `.continue()`: both implicit actions are independent, as shown in this bit of jQuery.print-in-page internal code which takes care of these implicit activities:
+
+  ```javascript
+  if (!e.isDefaultPrevented() && exec_f) {
+      // execute internal=default task
+      exec_f.call(this, e);
+  }
+  if (!e.isPropagationStopped()) {
+      this.continue();
+  }
+  ```
+
+- when the user wishes to prevent further registered event handlers to execute for the current event, than she can flag the event with [`event.stopImmediatePropagation`](http://api.jquery.com/event.stopimmediatepropagation/) as is usual in event handlers.
+
+- Also note that the `.abort()` API calls `.continue()` implicitly -- **after** triggering the `abortPrinting` event, so the above rules about implicit code execution after events applies, as usual.
+
+
+
 
 ### Methods
 
@@ -281,6 +330,7 @@ where <code><em>p</em></code> is the print-in-page instance obtained via the `$e
   <dt><code><em>p</em></code>.teardown()</dt>
     <dd>... <a href="http://learn.jquery.com/events/event-extensions/">jQuery teardown</a> ...</dd>
 </dl>
+
 
 
 
