@@ -265,6 +265,53 @@
                 // we now have a set of elements to print / preview:
                 // first we need to 'separate these out' by hiding the rest of the DOM tree.
                 //
+	    	// Keep in mind that we expect we've got multiple elements to print,
+		// in other words: `.elements().length > 1`
+		//
+		// The transformation process (v1.0)
+		// ---------------------------------
+		//
+		// mark each leaf (= node listed in `.elements()`) as 'printing', 
+		// mark all its parents as 'parent' and when an element in the 'leaves' list 
+		// (i.e. `.elements()`) turns out to be a parent of another leaf, 
+		// remove the other from the set of elements which' siblings should 
+		// be marked 'NOT-printing'.
+		//
+		// When all elements have been marked, then go through that 
+		// 'siblings-not-printing' list and mark each sibling which has not been 
+		// marked as 'printing' or 'parent' yet as 'NOT-printing'.
+		//
+		// The idea being that the selection set to be printed can overlap internally 
+		// for maximum flexibility and the above algorithm will prevent the wrong nodes 
+		// from being marked as NON-printing: the CSS stylesheet can now easily identify 
+		// which bits show and which don't.
+		//  
+		// Having the parents marked up as well is another simplification for the stylesheet: 
+		// anyone which doesn't have a 'parent' or 'printing' class attached 
+		// should NOT be printed. Hence it may be argued that the siblings-not-printing set 
+		// is superfluous.
+		//
+		//
+		// The transformation process (v1.0)
+		// ---------------------------------
+		//
+		// Like the above (now removed) code, we still 'flag' all siblings of leaves 
+		// as non-printing to arrive at a minimal set of nodes to 'display:none'.
+		//
+		// However it turned out to be much faster and simpler in terms of LOC (Lines Of Code)
+		// to do this through a series of jQuery/CSS selectors:
+		//
+		// 1. tag the leaves as 'printing'
+		// 2. tag the parents as 'printing'
+		// 3. tag the siblings of leaves as 'not-printing'
+		// 4. tag the siblings of parents as 'not-printing'
+		// 5. undo the 'not-printing' tag for any childs of leaves (this last step enables us
+		//    to work with input element sets which 'overlap', i.e. where a parent and a child 
+		//    are both listed in the `.elements()`.
+		//
+		// Generic approach
+		// ----------------
+		// 
                 // We do this by tagging each of the selected DOM elements with a 'print' class,
                 // while tagging each of their parents with a 'print-parent' class, 
                 // meanwhile tracking which elements are only 'print':
@@ -694,43 +741,13 @@
 
 
 
-/*
-
-multiple elements to print:
-
-mark each as 'printing', mark parents as 'parents' and when an element in the list turns out to be a parent of another, issue a warning and remove the other from the set of elements which' siblings should be marked 'NOT-printing'.
-
-When all elements have been marked, then go through that 'siblings-not-printing' list and mark each sibling which has not been marked as 'printing' or 'parent' yet as 'NOT-printing'.
-
-The idea being that the selection set to be printed can overlap internally for maximum flexibility and the above algorithm will prevent the wrong nodes from being marked as NON-printing: the CSS stylesheet can now easily identify which bits show and which don't.  Having the parents marked up as well is another simplification for the stylesheet: anyone which doesn't have a 'parent' or 'printing' class attached should NOT be printed. Hence it may be argued that the siblings-not-printing set is superfluous.
-
-To be tested...
-
-
-
-*/
 
 
 /*
+'T͎͍̘͙̖̤̉̌̇̅ͯ͋͢͜͝H̖͙̗̗̺͚̱͕̒́͟E̫̺̯͖͎̗̒͑̅̈ ̈ͮ̽ͯ̆̋́͏͙͓͓͇̹<̩̟̳̫̪̇ͩ̑̆͗̽̇͆́ͅC̬͎ͪͩ̓̑͊ͮͪ̄̚̕Ě̯̰̤̗̜̗͓͛͝N̶̴̞͇̟̲̪̅̓ͯͅT͍̯̰͓̬͚̅͆̄E̠͇͇̬̬͕͖ͨ̔̓͞R͚̠̻̲̗̹̀>̇̏ͣ҉̳̖̟̫͕ ̧̛͈͙͇͂̓̚͡C͈̞̻̩̯̠̻ͥ̆͐̄ͦ́̀͟A̛̪̫͙̺̱̥̞̙ͦͧ̽͛̈́ͯ̅̍N̦̭͕̹̤͓͙̲̑͋̾͊ͣŅ̜̝͌͟O̡̝͍͚̲̝ͣ̔́͝Ť͈͢ ̪̘̳͔̂̒̋ͭ͆̽͠H̢͈̤͚̬̪̭͗ͧͬ̈́̈̀͌͒͡Ơ̮͍͇̝̰͍͚͖̿ͮ̀̍́L͐̆ͨ̏̎͡҉̧̱̯̤̹͓̗̻̭ͅḐ̲̰͙͑̂̒̐́̊'
 
-    //1 / 0 === Infinity
-    if ( stats.avg_rep_post === Infinity ) {
-        stats.avg_rep_post = 'T͎͍̘͙̖̤̉̌̇̅ͯ͋͢͜͝H̖͙̗̗̺͚̱͕̒́͟E̫̺̯͖͎̗̒͑̅̈ ̈ͮ̽ͯ̆̋́͏͙͓͓͇̹<̩̟̳̫̪̇ͩ̑̆͗̽̇͆́ͅC̬͎ͪͩ̓̑͊ͮͪ̄̚̕Ě̯̰̤̗̜̗͓͛͝N̶̴̞͇̟̲̪̅̓ͯͅT͍̯̰͓̬͚̅͆̄E̠͇͇̬̬͕͖ͨ̔̓͞R͚̠̻̲̗̹̀>̇̏ͣ҉̳̖̟̫͕ ̧̛͈͙͇͂̓̚͡C͈̞̻̩̯̠̻ͥ̆͐̄ͦ́̀͟A̛̪̫͙̺̱̥̞̙ͦͧ̽͛̈́ͯ̅̍N̦̭͕̹̤͓͙̲̑͋̾͊ͣŅ̜̝͌͟O̡̝͍͚̲̝ͣ̔́͝Ť͈͢ ̪̘̳͔̂̒̋ͭ͆̽͠H̢͈̤͚̬̪̭͗ͧͬ̈́̈̀͌͒͡Ơ̮͍͇̝̰͍͚͖̿ͮ̀̍́L͐̆ͨ̏̎͡҉̧̱̯̤̹͓̗̻̭ͅḐ̲̰͙͑̂̒̐́̊';
-    }
-
-    
-function calc_qa_ratio ( questions, answers ) {
-    //for teh lulz
-    if ( !questions && answers ) {
-        return "H̸̡̪̯ͨ͊̽̅̾̎Ȩ̬̩̾͛ͪ̈́̀́͘ ̶̧̨̱̹̭̯ͧ̾ͬC̷̙̲̝͖ͭ̏ͥͮ͟Oͮ͏̮̪̝͍M̲̖͊̒ͪͩͬ̚̚͜Ȇ̴̟̟͙̞ͩ͌͝S̨̥̫͎̭ͯ̿̔̀ͅ";
-    }
-    else if ( !answers && questions ) {
-        return "TO͇̹̺ͅƝ̴ȳ̳ TH̘Ë͖́̉ ͠P̯͍̭O̚​N̐Y̡";
-    }
-    else if ( !answers && !questions ) {
-        return 'http://i.imgur.com/F79hP.png';
-    }
-
-    // #196:
-
+H̸̡̪̯ͨ͊̽̅̾̎Ȩ̬̩̾͛ͪ̈́̀́͘ ̶̧̨̱̹̭̯ͧ̾ͬC̷̙̲̝͖ͭ̏ͥͮ͟Oͮ͏̮̪̝͍M̲̖͊̒ͪͩͬ̚̚͜Ȇ̴̟̟͙̞ͩ͌͝S̨̥̫͎̭ͯ̿̔̀ͅ"
 */
+
+
+
