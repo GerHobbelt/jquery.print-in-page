@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Jquery.print-in-page : jquery plugin which enables you to print parts (elements) in the page without using popups or iframes: useful for complex parts which you don&#39;t want to copy / clone." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Jquery.print-in-page</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/GerHobbelt/jquery.print-in-page">View on GitHub</a>
+
+          <h1 id="project_title">Jquery.print-in-page</h1>
+          <h2 id="project_tagline">jquery plugin which enables you to print parts (elements) in the page without using popups or iframes: useful for complex parts which you don&#39;t want to copy / clone.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/GerHobbelt/jquery.print-in-page/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/GerHobbelt/jquery.print-in-page/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="jqueryprint-in-page" class="anchor" href="#jqueryprint-in-page"><span class="octicon octicon-link"></span></a>jquery.print-in-page</h1>
+
+<p>jquery plugin which enables you to print parts (elements) in the page without using popups or iframes: useful for complex parts which you don't want to copy / clone.</p>
+
+<h2>
+<a name="use-cases--when-you-want-to-use-this" class="anchor" href="#use-cases--when-you-want-to-use-this"><span class="octicon octicon-link"></span></a>Use Cases / When you want to use this</h2>
+
+<h3>
+<a name="single-page-applications-read-lots-of-javascript-in-your-page" class="anchor" href="#single-page-applications-read-lots-of-javascript-in-your-page"><span class="octicon octicon-link"></span></a>Single Page Applications (read: lots of JavaScript in your page!)</h3>
+
+<p>You have a Single Page Application of some complexity and you want to print just part(s) of the DOM without having to go through the effort of setting up a proper clone/copy in an iframe -- a job which can be particularly nasty when your content is largely JavaScript generated, e.g. large data grids, dynamic graphics such as D3-based graphs, etc.. </p>
+
+<p>re it would be so good to have a little tool which would just hide and unhide the irrelevant parts of your current DOM while printing. </p>
+
+<p>Oh, and a Print Preview would be nice!</p>
+
+<h4>
+<a name="the-answer" class="anchor" href="#the-answer"><span class="octicon octicon-link"></span></a>The Answer</h4>
+
+<p>Quite simple: use <code>jquery.print-in-page</code> instead:</p>
+
+<pre><code>var $your_selection = $('.collect-the-DOM-leaves-you-wish-to-print');
+// set up the print environment, but do NOT execute it yet.
+var pip_instance = $your_selection.print();
+
+//...
+
+// start the printing process:
+pip_instance.continue();
+</code></pre>
+
+<p>and with a preview it goes something like this:</p>
+
+<pre><code>var $your_selection = $('.collect-the-DOM-leaves-you-wish-to-print');
+// set up the print environment, but do NOT execute it yet.
+// Also hook into the post-preview to ensure we will ait for
+// the user to hit 'okay' button after having seen the preview:
+var pip_instance = $your_selection.print()
+.on("finishPrintPreview", function (e) {
+    // signal the system that it should NOT automatically 
+    // call .continue() after we are done here:
+    e.stopPropagation();
+});
+
+// set up the preview 'okay' button click handler to continue
+// printing after having seen the preview.
+$('#preview-okay').click(function (e) {
+  pip_instance.continue();        
+});
+
+// ... and likewise for the 'abort' button after having seen the preview
+$('#preview-abort').click(function (e) {
+  pip_instance.abort();        
+});
+
+//...
+
+// start the preview process 
+// (the print process will follow automatically):
+pip_instance.continue();
+</code></pre>
+
+<h3>
+<a name="your-browser-environment-does-not-allow-iframes-nor-popup-windows" class="anchor" href="#your-browser-environment-does-not-allow-iframes-nor-popup-windows"><span class="octicon octicon-link"></span></a>Your browser environment does not allow iframes nor popup windows</h3>
+
+<p>In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window). </p>
+
+<h4>
+<a name="the-answer-1" class="anchor" href="#the-answer-1"><span class="octicon octicon-link"></span></a>The Answer</h4>
+
+<p>Again, <code>jquery.print-in-page</code> at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (<code>window.print()</code>) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. </p>
+
+<p>When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.</p>
+
+<p>Easy as pie.</p>
+
+<p>And no copying the DOM snapshot or otherwise into iframes or popups, hence less memory consumption by the brwoser too!</p>
+
+<hr><h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p><code>$.fn.print(options)</code> -- can be used to set the options shared among all 'print-in-page' instances, i.e. use this if you want to tweak the defaults.</p>
+
+<p><code>$els.print(options)</code> -- initializes a print-in-page instance for the given DOM node collection. Returns a reference to the print-in-page instance, so that you can chain print-in-page methods.</p>
+
+<h3>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
+
+<p>You can override the class names applied by jquery.print-in-page to accomplish the show/hide of the relevant DOM content. Here's the default set:</p>
+
+<pre><code>{
+  printLeafClass:         "pip-print",
+  printParentClass:       "pip-print-parent",
+  printRootClass:         "pip-print-root",
+  notPrintedLeafClass:    "pip-do-not-print"
+};
+</code></pre>
+
+<p>which you may override by specifying different class names in the <code>.print(options)</code> like this:</p>
+
+<pre><code>// tweak the global instance, which serves as a 
+// defaults container for all .print() sessions
+// yet to come:
+$.fn.print({
+  printLeafClass:         "myApp-show-leaf",
+  printParentClass:       "myApp-show-parent",
+  printRootClass:         "myApp-show-root",
+  notPrintedLeafClass:    "myApp-doNotShow-sibling-leaf"
+};
+</code></pre>
+
+<p>or </p>
+
+<pre><code>// set up a special set of classes for this particular
+// instance:
+var pip = $('table.report').print({
+  printLeafClass:         "report-show-on-print",
+  printParentClass:       "report-show-on-print",
+  printRootClass:         "report-show-on-print",
+  notPrintedLeafClass:    "report-hide-on-print"
+};
+
+//...
+pip.continue();
+</code></pre>
+
+<h3>
+<a name="events" class="anchor" href="#events"><span class="octicon octicon-link"></span></a>Events</h3>
+
+<p>print-in-page fires these custom events on the <strong>print-in-page instance</strong>:</p>
+
+<ul>
+<li><p>initPrinting -- triggered when you invoke the <code>.continue()</code> API method for the first time, starting a print process/session in your browser</p></li>
+<li><p>startPrintPreview -- ...</p></li>
+<li><p>renderPrintPreview -- override the default here when you have specific render (DOM manipulation) needs which do not complement the default behaviour. See the demo/main.js file for an example where a <strong>supplementary filtering process</strong> is applied in the <code>finishPrintPreview</code> event.</p></li>
+<li><p>finishPrintPreview -- Concludes the preview render/show process. By now we expect you to have your preview display in order and awaiting user ack/nack action.</p></li>
+<li><p>startPrint -- The actual printing process starts; if you need to perform some last-minute tweak, here's the place for that.</p></li>
+<li><p>renderPrint -- this phase is executing the actual <code>window.print()</code> call. Do not <code>e.preventDefault()</code> unless you wish to replace the actual printing process itself.</p></li>
+<li><p>finishPrint -- ...</p></li>
+<li><p>startRollbackAfterPrint -- you receive this event when the printing process has completed (<code>onafterprint</code>) or has been aborted via the <code>.abort()</code> API method</p></li>
+<li><p>renderRollbackAfterPrint -- the default action following this event is to restore the DOM to its original glory from before the start of preview/print session</p></li>
+<li><p>finishRollbackAfterPrint -- ...</p></li>
+<li><p>donePrinting -- this is the last event you will receive at the end of any and each print/preview session</p></li>
+<li><p>abortPrinting -- this event is fired when the .abort()` API method has been invoked and the current print/preview process can be aborted.</p></li>
+</ul><h3>
+<a name="methods" class="anchor" href="#methods"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<p>where <code>*p*</code> is the print-in-page instance obtained via the <code>$elements.print()</code> API:</p>
+
+<p><code>*p*.on(event, f)</code> -- register function <code>f</code> for the given event.</p>
+
+<blockquote>
+<p>The handlers are executed in the order they are registered.</p>
+
+<p><code>f</code> may be an <em>array</em> of handlers: each of these is then registered with the given event</p>
+</blockquote>
+
+<p><code>*p*.off(event, f)</code> -- unregister function <code>f</code> for the given event.</p>
+
+<blockquote>
+<p><code>f</code> may be an <em>array</em> of handlers: each of these is then unregistered from the given event</p>
+
+<p>When you do not specify any handler (or <code>null</code>), then all registered handlers for this event are unregistered.</p>
+
+<p>When you do not specify an event, then the handler is unregistered for <em>all</em> events.</p>
+</blockquote>
+
+<p><code>*p*.continue()</code> -- start / continue the print operation</p>
+
+<blockquote>
+<p>Note: when invoked while the process is already commencing on its own, i.e. when called from an event handler during a <em>synchronous</em> action state,
+the call is simply ignored (the return value of the event handler is observed instead)</p>
+</blockquote>
+
+<p><code>*p*.prime(N)</code> -- prime the print operation for N <code>.continue()</code> invocations: use this method when you have multiple async processes running your event handler(s) and need <em>each and every one of them</em> to invoke <code>.continue()</code> before the print process may commence.</p>
+
+<p><em>p</em>.abort()` -- You can ABORT the print process at any time by invoking this method.</p>
+
+<blockquote>
+<p>The DOM will be restored to its original pre-print-preview glory and the print process is reset.</p>
+</blockquote>
+
+<p><code>*p*.isAborted()</code> -- truthy when the current printing session is being aborted. This flag holds until the session ends (i.e. until after the <code>donePrinting</code> event).</p>
+
+<p><code>*p*.isWorking()</code> -- truthy when the print-in-page component is considered to be 'working' i.e. when it won't liten to <code>.continue()</code> calls as it's already moving along on its own volition</p>
+
+<p><code>*p*.elements([$els])</code> -- getter/setter for the set of DOM elements which will be print/previewed. You can change the DOM element collection until the preview starts (i.e. right before the <code>renderPrintPreview</code> event) and after the original situation has been restored (i.e. just before the <code>finishRollbackAfterPrint</code> event)</p>
+
+<p><code>*p*.destroy()</code> -- alias or <code>.teardown()</code></p>
+
+<p><code>*p*.teardown()</code> -- ... jquery teardown ...</p>
+
+<hr><h2>
+<a name="examples--demos" class="anchor" href="#examples--demos"><span class="octicon octicon-link"></span></a>Examples / Demos</h2>
+
+<p>See the <code>./demo</code> directory for <a href="demo/index.html">several examples</a>.</p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+<li><p>All demos use <a href="http://requirejs.org/">RequireJS</a> to load the JavaScript assets.</p></li>
+<li><p>All demos share <a href="demo/main.js">a single JS driver file</a>.</p></li>
+<li><p>Check the differences in the HTML for the different examples in the <code>demo/</code> directory: these build upon one another from simple to complex, while the <a href="demo/main.js"><code>main.js</code></a> driver code serves them all.</p></li>
+<li><p>note that the <a href="demo/restyling-and-printing.html">restyling demo</a> has been specifically tailored to make the actual printout <strong>different from the preview</strong>: by using extra print-media CSS rules and a few bits of DOM (HTML) the printout consists of multiple pages, while the preview is a single page, which does not include all the content in the lead-in page either. Check the example's HTML and CSS to observe what goes on in there.</p></li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Jquery.print-in-page maintained by <a href="https://github.com/GerHobbelt">GerHobbelt</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
