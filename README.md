@@ -70,7 +70,7 @@ pip_instance.continue();
         
 
 
-### Your browser environment does not allow iframes nor popup windows
+### Your browser does not allow iframes nor popup windows
 
 In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).
 
