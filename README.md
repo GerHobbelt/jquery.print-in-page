@@ -88,6 +88,10 @@ And no copying the DOM snapshot or otherwise into iframes or popups, hence less 
 
 
 
+---
+
+
+
 
 API
 ---
@@ -224,6 +228,15 @@ where `*p*` is the print-in-page instance obtained via the `$elements.print()` A
 `*p*.destroy()` -- alias or `.teardown()`
 
 `*p*.teardown()` -- ... jquery teardown ...
+
+
+
+
+
+
+
+
+---
 
 
 
