@@ -244,15 +244,15 @@ where `*p*` is the print-in-page instance obtained via the `$elements.print()` A
 Examples / Demos
 ----------------
 
-See the `./demo` directory for several examples [demo/index.html].
+See the `./demo` directory for [several examples](demo/index.html).
 
 **Notes**:
 
 - All demos use [RequireJS](http://requirejs.org/) to load the JavaScript assets.
 
-- All demos share a single JS driver file [demo/main.js]
+- All demos share [a single JS driver file](demo/main.js).
 
-- Check the differences in the HTML for the different examples in the `demo/` directory: these build upon one another from simple to complex, while the `main.js` driver code serves them all
+- Check the differences in the HTML for the different examples in the `demo/` directory: these build upon one another from simple to complex, while the [`main.js`](demo/main.js) driver code serves them all.
 
-- note that the [demo/restyling-and-printing.html] demo has been specifically tailored to make the actual printout **different from the preview**: by using extra print-media CSS rules and a few bits of DOM (HTML) the printout consists of multiple pages, while the preview is a single page, which does not include all the content in the lead-in page either. Check the example's HTML and CSS to observe what goes on in there.
+- note that the [restyling demo](demo/restyling-and-printing.html) has been specifically tailored to make the actual printout **different from the preview**: by using extra print-media CSS rules and a few bits of DOM (HTML) the printout consists of multiple pages, while the preview is a single page, which does not include all the content in the lead-in page either. Check the example's HTML and CSS to observe what goes on in there.
   
