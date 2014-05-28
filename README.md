@@ -21,7 +21,37 @@ Oh, and a Print Preview would be nice!
 
 #### The Answer
 
-Quite simple: use `jQuery.print-in-page` instead:
+Quite simple: use `jQuery.print-in-page` instead. See the usage example further below.
+
+
+
+
+### Your browser does not allow iframes nor popup windows
+
+In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).
+
+(Also note that any users who employ ad & popup blockers *very probably* not only nip any popups in the bud but also kill your iframes too, particularly when those blockers have been dialed up to aggressive protection levels. jQuery.print-in-page doesn't mind. In fact, we heartily encourage ad-blocking in your web pages!)
+
+
+
+
+#### The Answer
+
+Again, `jQuery.print-in-page` at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (`window.print()`) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. 
+
+When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.
+
+Easy as pie.
+
+And no copying the DOM snapshot or otherwise into iframes or popups, hence less memory consumption by the browser too!
+
+
+
+
+
+#### Usage Example
+
+Simply set up a print instance using `.print()` and then execute the print process by calling its `.continue()` method once:
 
 
 ```javascript
@@ -68,27 +98,6 @@ pip_instance.continue();
 ```
 
         
-
-
-### Your browser does not allow iframes nor popup windows
-
-In highly secure and other restricted environments where iframes are frowned upon, the 'standard' ways to print a web page are not possible (as all methods rely on either the ability to create and fill an iframe or a popup window).
-
-(Also note that any users who employ ad & popup blockers *very probably* not only nip any popups in the bud but also kill your iframes too, particularly when those blockers have been dialed up to aggressive protection levels. jQuery.print-in-page doesn't mind. In fact, we heartily encourage ad-blocking in your web pages!)
-
-
-
-
-#### The Answer
-
-Again, `jQuery.print-in-page` at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (`window.print()`) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. 
-
-When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.
-
-Easy as pie.
-
-And no copying the DOM snapshot or otherwise into iframes or popups, hence less memory consumption by the brwoser too!
-
 
 
 
@@ -193,7 +202,13 @@ print-in-page fires these custom events on the **print-in-page instance**:
     <dd>...</dd>
 
   <dt>donePrinting</dt>
-    <dd>this is the last event you will receive at the end of any and each print/preview session</dd>
+    <dd>
+    <p>This is the last event you will receive at the end of any and each print/preview session.</p>
+
+    <blockquote>
+    Note that the print run is finished once this event has passed. The print session (i.e. the reference which was previously returned by the `.print()` call) will reset itself after this. This means that you may invoke `.continue()` again to rerun the print process.
+    </blockquote>
+    </dd>
 
   <dt>abortPrinting</dt>
     <dd>this event is fired when the <code>.abort()</code> API method has been invoked and the current print/preview process can be aborted.</dd>
