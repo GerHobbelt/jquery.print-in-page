@@ -101,10 +101,10 @@ API
 ---
 
 <dl>
-<dt>`$.fn.print(options)`</dt>
+<dt>$.fn.print(options)</dt>
   <dd>can be used to set the options shared among all 'print-in-page' instances, i.e. use this if you want to tweak the defaults.</dd>
 
-<dt>`$els.print(options)`</dt>
+<dt>$els.print(options)</dt>
   <dd>initializes a print-in-page instance for the given DOM node collection. Returns a reference to the print-in-page instance, so that you can chain print-in-page methods.</dd>
 </dl>
 
@@ -161,30 +161,43 @@ pip.continue();
 
 print-in-page fires these custom events on the **print-in-page instance**:
 
-- initPrinting -- triggered when you invoke the `.continue()` API method for the first time, starting a print process/session in your browser
+<dl>
+  <dt>initPrinting</dt>
+    <dd>triggered when you invoke the <code>.continue()</code> API method for the first time, starting a print process/session in your browser</dd>
 
-- startPrintPreview -- ...
+  <dt>startPrintPreview</dt>
+    <dd>...</dd>
 
-- renderPrintPreview -- override the default here when you have specific render (DOM manipulation) needs which do not complement the default behaviour. See the [`javascripts/main.js`](javascripts/main.js) file for an example where a **supplementary filtering process** is applied in the `finishPrintPreview` event.
+  <dt>renderPrintPreview</dt>
+    <dd>override the default here when you have specific render (DOM manipulation) needs which do not complement the default behaviour. See the [`javascripts/main.js`](javascripts/main.js) file for an example where a <strong>supplementary filtering process</strong> is applied in the <code>finishPrintPreview</code> event.</dd>
 
-- finishPrintPreview -- Concludes the preview render/show process. By now we expect you to have your preview display in order and awaiting user ack/nack action.
+  <dt>finishPrintPreview</dt>
+    <dd>Concludes the preview render/show process. By now we expect you to have your preview display in order and awaiting user ack/nack action.</dd>
 
-- startPrint -- The actual printing process starts; if you need to perform some last-minute tweak, here's the place for that.
+  <dt>startPrint</dt>
+    <dd>The actual printing process starts; if you need to perform some last-minute tweak, here's the place for that.</dd>
 
-- renderPrint -- this phase is executing the actual `window.print()` call. Do not `e.preventDefault()` unless you wish to replace the actual printing process itself.
+  <dt>renderPrint</dt>
+    <dd>this phase is executing the actual <code>window.print()</code> call. Do not <code>e.preventDefault()</code> unless you wish to replace the actual printing process itself.</dd>
 
-- finishPrint -- ...
+  <dt>finishPrint</dt>
+    <dd>...</dd>
 
-- startRollbackAfterPrint -- you receive this event when the printing process has completed (`onafterprint`) or has been aborted via the `.abort()` API method
+  <dt>startRollbackAfterPrint</dt>
+    <dd>you receive this event when the printing process has completed (<a href="https://developer.mozilla.org/en-US/docs/Web/API/Window.onafterprint">onafterprint</a>) or has been aborted via the <code>.abort()</code> API method</dd>
 
-- renderRollbackAfterPrint -- the default action following this event is to restore the DOM to its original glory from before the start of preview/print session
+  <dt>renderRollbackAfterPrint</dt>
+    <dd>the default action following this event is to restore the DOM to its original glory from before the start of preview/print session</dd>
 
-- finishRollbackAfterPrint -- ...
+  <dt>finishRollbackAfterPrint</dt>
+    <dd>...</dd>
 
-- donePrinting -- this is the last event you will receive at the end of any and each print/preview session
+  <dt>donePrinting</dt>
+    <dd>this is the last event you will receive at the end of any and each print/preview session</dd>
 
-- abortPrinting -- this event is fired when the .abort()` API method has been invoked and the current print/preview process can be aborted.
-
+  <dt>abortPrinting</dt>
+    <dd>this event is fired when the <code>.abort()</code> API method has been invoked and the current print/preview process can be aborted.</dd>
+</dl>
 
 
 
@@ -192,51 +205,82 @@ print-in-page fires these custom events on the **print-in-page instance**:
 
 ### Methods
 
-where `*p*` is the print-in-page instance obtained via the `$elements.print()` API:
+where <code><em>p</em></code> is the print-in-page instance obtained via the `$elements.print()` API:
 
-`*p*.on(event, f)` -- register function `f` for the given event.
+<dl>
+  <dt><code><em>p</em></code>.on(event, f)</dt>
+    <dd>
+    <p>register function <code>f</code> for the given event.</p>
 
-> The handlers are executed in the order they are registered.
+    <blockquote>
+    The handlers are executed in the order they are registered.
+    </blockquote>
 
-> `f` may be an *array* of handlers: each of these is then registered with the given event
+    <blockquote>
+    <code>f</code> may be an <em>array</em> of handlers: each of these is then registered with the given event
+    </blockquote>
+  </dd>
 
+  <dt><code><em>p</em></code>.off(event, f)</dt>
+    <dd>
+    <p>unregister function <code>f</code> for the given event.</p>
 
-`*p*.off(event, f)` -- unregister function `f` for the given event.
+    <blockquote>
+    <code>f</code> may be an <em>array</em> of handlers: each of these is then unregistered from the given event
+    </blockquote>
 
-> `f` may be an *array* of handlers: each of these is then unregistered from the given event
+    <blockquote>
+    When you do not specify any handler (or <code>null</code>), then all registered handlers for this event are unregistered.
+    </blockquote>
 
-> When you do not specify any handler (or `null`), then all registered handlers for this event are unregistered.
+    <blockquote>
+    When you do not specify an event, then the handler is unregistered for <em>all</em> events.
+    </blockquote>
+  </dd>
 
-> When you do not specify an event, then the handler is unregistered for *all* events.
-
-
-`*p*.continue()` -- start / continue the print operation
+  <dt><code><em>p</em></code>.continue()</dt>
+    <dd>
+    <p>start / continue the print operation</p>
         
-> Note: when invoked while the process is already commencing on its own, i.e. when called from an event handler during a *synchronous* action state,
-> the call is simply ignored (the return value of the event handler is observed instead)
+    <blockquote>
+    <strong>Note</strong>: when invoked while the process is already commencing on its own, i.e. when called from an event handler during a <em>synchronous</em> action state, the call is simply ignored (the return value of the event handler is observed instead)
+    </blockquote>
+  </dd>
 
 
-`*p*.prime(N)` -- prime the print operation for N `.continue()` invocations: use this method when you have multiple async processes running your event handler(s) and need *each and every one of them* to invoke `.continue()` before the print process may commence.
+  <dt><code><em>p</em></code>.prime(N)</dt>
+    <dd>prime the print operation for <em>N</em> <code>.continue()</code> invocations: use this method when you have multiple async processes running your event handler(s) and need <em>each and every one of them</em> to invoke <code>.continue()</code> before the print process may commence.
+    </dd>
 
 
-*p*.abort()` -- You can ABORT the print process at any time by invoking this method.
+  <dt><code><em>p</em></code>.abort()</dt>
+    <dd>
+    <p>You can ABORT the print process at any time by invoking this method.</p>
 
-> The DOM will be restored to its original pre-print-preview glory and the print process is reset.
-
-
-`*p*.isAborted()` -- truthy when the current printing session is being aborted. This flag holds until the session ends (i.e. until after the `donePrinting` event).
-
-
-`*p*.isWorking()` -- truthy when the print-in-page component is considered to be 'working' i.e. when it won't liten to `.continue()` calls as it's already moving along on its own volition
-
-
-`*p*.elements([$els])` -- getter/setter for the set of DOM elements which will be print/previewed. You can change the DOM element collection until the preview starts (i.e. right before the `renderPrintPreview` event) and after the original situation has been restored (i.e. just before the `finishRollbackAfterPrint` event)
+    <blockquote>
+    The DOM will be restored to its original pre-print-preview glory and the print process is reset.
+    </blockquote>
+  </dd>
 
 
-`*p*.destroy()` -- alias or `.teardown()`
+  <dt><code><em>p</em></code>.isAborted()</dt>
+    <dd>truthy when the current printing session is being aborted. This flag holds until the session ends (i.e. until after the `donePrinting` event).</dd>
 
-`*p*.teardown()` -- ... jQuery teardown ...
 
+  <dt><code><em>p</em></code>.isWorking()</dt>
+    <dd>truthy when the print-in-page component is considered to be 'working' i.e. when it won't listen to <code>.continue()</code> calls as it's already moving along on its own volition</dd>
+
+
+  <dt><code><em>p</em></code>.elements(<em>[$els]</em>)</dt>
+    <dd>getter/setter for the set of DOM elements which will be print/previewed. You can change the DOM element collection until the preview starts (i.e. right before the <code>renderPrintPreview</code> event) and after the original situation has been restored (i.e. just before the <code>finishRollbackAfterPrint</code> event)</dd>
+
+
+  <dt><code><em>p</em></code>.destroy()</dt>
+    <dd>alias of <code>.teardown()</code></dd>
+
+  <dt><code><em>p</em></code>.teardown()</dt>
+    <dd>... <a href="http://learn.jquery.com/events/event-extensions/">jQuery teardown</a> ...</dd>
+</dl>
 
 
 
