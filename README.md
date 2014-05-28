@@ -157,7 +157,7 @@ print-in-page fires these custom events on the **print-in-page instance**:
 
 - startPrintPreview -- ...
 
-- renderPrintPreview -- override the default here when you have specific render (DOM manipulation) needs which do not complement the default behaviour. See the demo/main.js file for an example where a **supplementary filtering process** is applied in the `finishPrintPreview` event.
+- renderPrintPreview -- override the default here when you have specific render (DOM manipulation) needs which do not complement the default behaviour. See the [`scripts/main.js`](scripts/main.js) file for an example where a **supplementary filtering process** is applied in the `finishPrintPreview` event.
 
 - finishPrintPreview -- Concludes the preview render/show process. By now we expect you to have your preview display in order and awaiting user ack/nack action.
 
@@ -250,9 +250,9 @@ See the `./demo` directory for [several examples](demo/index.html).
 
 - All demos use [RequireJS](http://requirejs.org/) to load the JavaScript assets.
 
-- All demos share [a single JS driver file](demo/main.js).
+- All demos share [a single JS driver file](scripts/main.js).
 
-- Check the differences in the HTML for the different examples in the `demo/` directory: these build upon one another from simple to complex, while the [`main.js`](demo/main.js) driver code serves them all.
+- Check the differences in the HTML for the different examples in the `demo/` directory: these build upon one another from simple to complex, while the [`main.js`](scripts/main.js) driver code serves them all.
 
 - note that the [restyling demo](demo/restyling-and-printing.html) has been specifically tailored to make the actual printout **different from the preview**: by using extra print-media CSS rules and a few bits of DOM (HTML) the printout consists of multiple pages, while the preview is a single page, which does not include all the content in the lead-in page either. Check the example's HTML and CSS to observe what goes on in there.
   
