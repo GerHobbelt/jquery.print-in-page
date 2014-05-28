@@ -1,7 +1,7 @@
-jquery.print-in-page
+jQuery.print-in-page
 ====================
 
-jquery plugin which enables you to print parts (elements) in the page without using popups or iframes: useful for complex parts which you don't want to copy / clone.
+jQuery plugin which enables you to print parts (elements) in the page without using popups or iframes: useful for complex parts which you don't want to copy / clone.
 
 
 
@@ -21,7 +21,7 @@ Oh, and a Print Preview would be nice!
 
 #### The Answer
 
-Quite simple: use `jquery.print-in-page` instead:
+Quite simple: use `jQuery.print-in-page` instead:
 
 
 ```
@@ -77,7 +77,7 @@ In highly secure and other restricted environments where iframes are frowned upo
 
 #### The Answer
 
-Again, `jquery.print-in-page` at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (`window.print()`) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. 
+Again, `jQuery.print-in-page` at your service! The example code above (see the first Use Case) merely applies a set of classes to your current DOM and that is it, really. It also invokes the standard browser print command (`window.print()`) at the appropriate time and offers a plethora of events where you can hook into the preview and print processes to further tweak your DOM. 
 
 When all is done, the 'pip' classes are removed from the DOM again and the old situation is restored.
 
@@ -104,7 +104,7 @@ API
 
 ### Options
 
-You can override the class names applied by jquery.print-in-page to accomplish the show/hide of the relevant DOM content. Here's the default set:
+You can override the class names applied by jQuery.print-in-page to accomplish the show/hide of the relevant DOM content. Here's the default set:
 
 ```
 {
@@ -227,7 +227,7 @@ where `*p*` is the print-in-page instance obtained via the `$elements.print()` A
 
 `*p*.destroy()` -- alias or `.teardown()`
 
-`*p*.teardown()` -- ... jquery teardown ...
+`*p*.teardown()` -- ... jQuery teardown ...
 
 
 
