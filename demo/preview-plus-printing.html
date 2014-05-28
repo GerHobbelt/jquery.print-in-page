@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery Print-in-Page demo: Preview &amp; Printing</title>
+        <style>
+html, body, h1, p, div 
+{
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+    padding: 0;    
+}
+
+ul
+{
+    font-size: 16px;
+    line-height: 22px;
+}
+
+h1
+{
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0;
+    padding: 0;    
+}        
+
+p
+{
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0;
+    padding: 0;    
+}
+
+div 
+{
+    padding: 0 6px;
+    margin: 3px;
+    border: 1px solid #888;
+}
+
+body
+{
+    padding: 6px;
+}
+
+div.content-A
+{
+    background-color: #fee;
+}        
+
+div.content-B
+{
+    background-color: #eee;
+}        
+
+div.content-C
+{
+    background-color: #eef;
+}        
+
+div.content-D
+{
+    background-color: #efe;
+}        
+
+.print-buttons, .previewPanel
+{
+    background-color: #ffe;
+	border: 2px solid grey;
+	padding: 1em 2em;
+	text-align: center;
+	margin-top: 2em;
+}        
+
+.print-buttons button, .previewPanel button
+{
+    min-width: 20em;
+	margin: 0 2em;
+}        
+
+.previewPanel p
+{
+    font-size: 14px;
+    font-style: italic;
+    margin-bottom: 1em;    
+}
+
+
+/* using styles to hide/show printing content */
+
+.pip-do-not-print
+{
+    display: none !important;
+}
+.pip-print
+{
+}
+.pip-print-parent
+{
+}
+.pip-print-root
+{
+    padding: 1em;
+    border: 6px solid red;
+    margin: 1em;
+}
+
+
+
+/* this bit of the DOM stays hidden until the preview need it: */
+.previewPanel
+{
+    display: none;
+}
+
+        </style>
+	</head>
+	<body>
+        <div class="content-A">
+            <h1>content A</h1>
+            <p>Bla bla bla</p>
+        </div>
+
+        <div class="content-B">
+            <h1>content B</h1>
+            <p>Bla bla bla</p>
+            
+            <div class="content-C">
+                <h1>content C inside B</h1>
+                <p>Bla bla bla</p>
+            </div>
+            
+            <div class="content-D">
+                <h1>content D inside B</h1>
+                <p>Bla bla bla</p>
+            </div>
+        </div>
+                
+        <div class="content-A">
+            <h1>more content A</h1>
+            <p>Bla bla bla</p>
+        </div>
+
+        <div class="content-A">
+            <h1>even more content A</h1>
+            <p>Bla bla bla</p>
+        </div>
+
+        <div class="content-B">
+            <h1>more content B</h1>
+            <p>Bla bla bla</p>
+            
+            <div class="content-C">
+                <h1>more content C inside B</h1>
+                <p>Bla bla bla</p>
+            </div>
+            
+            <div class="content-D">
+                <h1>more content D inside B</h1>
+                <p>Bla bla bla</p>
+            </div>
+        </div>
+                
+        <div class="print-buttons">
+            <div style="margin-bottom: 1em; text-align: left; border: 0; background-color: #eed;">
+                <input name="only-div-nodes" id="only-div-nodes" type="checkbox" />
+                <label for="only-div-nodes">Only edit <code>DIV</code> nodes in the DOM <em>(watch the effect on the 'B' content being included in the printed result or not... this being due to the <code>P</code> and <code>H1</code> DOM nodes being hidden as siblings of the 'C' &amp; 'D' <code>DIV</code>s.)</em></label>
+            </div>
+
+            <button class="click-to-print print-area-A">Click to Print 'A' sections only</button>
+                
+            <button class="click-to-print print-area-C">Click to Print 'C' sections only (nested inside 'B' sections...)</button>
+                
+            <button class="click-to-print print-area-C print-area-B" title="HINT: this will result in each entire 'B' chunk being printed; the print-in-page plugin does not mind you effectively specified the C sections _twice_">Click to Print 'C' plus 'B' sections == all 'B' sections</button>
+                
+            <button class="click-to-print print-area-A print-area-D">Click to Print 'A' + 'D' sections</button>
+        </div>
+
+        <div class="previewPanel">
+            <hr />
+            <p>Now that you see this preview above, are you sure you want to print this stuff? Hit the <code>YES</code> button if you want to, otherwise click on the <code>NO/ABORT</code> button when you wish to abort the print action now.</p>
+
+            <button id="preview-okay">YES</button>
+                    
+            <button id="preview-abort">NO / ABORT</button>
+        </div>
+
+
+        <!-- Check the console -->
+
+        <script data-main="../scripts/main" src="../libs/require.js"></script>
+	</body>
+</html>
